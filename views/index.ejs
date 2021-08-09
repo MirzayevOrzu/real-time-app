@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: row;
+    }
+
+    aside {
+      width: 150px;
+      min-height: 100vh;
+    }
+
+    main {
+      width: 600px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside>
+      <form action="/group" method="POST">
+        <label for="name">Name of group: </label>
+        <input type="text" name="name" id="name">
+        <select name="_type" id="_type">
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
+        <button type="submit">Make new Group</button>
+      </form>
+    </aside>
+    <main>
+      <div>
+        <h1>Welcome to</h1>
+        <h1>Run time chat application</h1>
+        <h4>Public Groups</h4>
+        <ul>
+          <% for( let i = 0; i < groups.length; i++) { %>
+            <li><a href="/<%=groups[i]._id%>" ><%= groups[i].name %></a></li> 
+          <% } %>
+        </ul>
+      </div>
+      <form action="index.html" method="post">
+        <input id="m" type="text" name="message" value="" />
+        <button type="submit" name="button">Send</button>
+      </form>
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+
+</html>
