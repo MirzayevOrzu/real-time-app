@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= classroom.name %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <a href="/">Go to home</a>
+    <h1><%= classroom.name %></h1>
+    <h2><%= user.displayName %></h2>
+    <ul id="messages">
+      <% for( let message of messages ) { %>
+      <li><%= message.message %> <= <%= message.author.name %></li>
+      <% } %>
+    </ul>
+    <form action="/" method="POST">
+      <input id="m" type="text" name="message" />
+      <button type="submit" name="button">Send</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      const groupId = "<%- classroom._id %>";
+      const userId = "<%- user._id %>";
+      const userName = "<%- user.displayName %>";
+
+      const socket = io.connect("/classroom");
+      $("form").submit(() => {
+        let message = $("#m").val();
+
+        socket.emit("message", { message, room: classId, userId, userName });
+        $("#m").val("");
+        return false;
+      });
+
+      socket.on("connect", () => {
+        // emitting to everybody
+        socket.emit("join", { room: classId });
+      });
+
+      socket.on("message", (messageData) => {
+        const msg = `<li>${messageData.message} <= ${messageData.by}</li>`;
+        $("#messages").append(msg);
+      });
+    </script>
+  </body>
+</html>
